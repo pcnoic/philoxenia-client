@@ -5,7 +5,7 @@
         <q-btn
           to="/"
           flat
-          style="font-family: 'Pacifico', cursive"
+          style="font-family: 'Ubuntu', sans-serif"
           label="🏡 Philoxenia"
         />
         <q-space />
@@ -17,26 +17,26 @@
         <q-tabs style="margin-right:50px" v-if="$q.platform.is.desktop" v-model="tab" shrink>
           <q-route-tab
             to="/offer"
-            style="font-family: 'Fredoka One', cursive"
+            style="font-family: 'Ubuntu', sans-serif"
             name="offer"
             label="Offer space"
           />
           <q-route-tab
             to="/request"
-            style="font-family: 'Fredoka One', cursive"
+            style="font-family: 'Ubuntu', sans-serif"
             name="tab2"
             label="Request space"
           />
           <q-route-tab
             to="/about"
-            style="font-family: 'Fredoka One', cursive"
+            style="font-family: 'Ubuntu', sans-serif"
             name="tab3"
             label="About"
           />
         </q-tabs>
         <q-btn-dropdown
           v-if="$q.platform.is.mobile"
-          style="font-family: 'Fredoka One', cursive"
+          style="font-family: 'Ubuntu', sans-serif"
           stretch
           flat
           borderless
@@ -46,19 +46,19 @@
             <q-tabs v-model="tab" shrink>
               <q-route-tab
                 to="/offer"
-                style="font-family: 'Fredoka One', cursive"
+                style="font-family: 'Ubuntu', sans-serif"
                 name="offer"
                 label="Offer space"
               />
               <q-route-tab
                 to="/request"
-                style="font-family: 'Fredoka One', cursive"
+                style="font-family: 'Ubuntu', sans-serif"
                 name="tab2"
                 label="Request space"
               />
               <q-route-tab
                 to="/about"
-                style="font-family: 'Fredoka One', cursive"
+                style="font-family: 'Ubuntu', sans-serif"
                 name="tab3"
                 label="About"
               />
@@ -66,7 +66,7 @@
           </q-list>
         </q-btn-dropdown>
         <q-select
-          style="font-family: 'Fredoka One', cursive; min-width: 50px"
+          style="font-family: 'Ubuntu', sans-serif; min-width: 50px"
           v-model="locale"
           :options="localeOptions"
           dense
@@ -116,4 +116,5 @@ export default {
 </script>
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap');
 </style>

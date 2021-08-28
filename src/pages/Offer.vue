@@ -14,7 +14,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           label="Your name *"
           hint="Name and surname:"
           lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+          :rules="[(val) => (val && val.length > 0) || 'Please enter your name!']"
         />
 
         <q-input
