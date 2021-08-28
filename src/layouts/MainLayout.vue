@@ -14,28 +14,32 @@
         notice shrink property since we are placing it
         as child of QToolbar
       -->
-        <q-tabs v-model="tab" shrink>
-          <q-route-tab
-            to="/offer"
-            style="font-family: 'Fredoka One', cursive"
-            name="offer"
-            label="Offer space"
-          />
-          <q-route-tab
-            to="/request"
-            style="font-family: 'Fredoka One', cursive"
-            name="tab2"
-            label="Request space"
-          />
-          <q-route-tab
-            to="/about"
-            style="font-family: 'Fredoka One', cursive"
-            name="tab3"
-            label="About"
-          />
-        </q-tabs>
+        <q-btn-dropdown style="font-family: 'Fredoka One', cursive;" stretch flat label="Menu">
+          <q-list>
+            <q-tabs v-model="tab" shrink>
+              <q-route-tab
+                to="/offer"
+                style="font-family: 'Fredoka One', cursive"
+                name="offer"
+                label="Offer space"
+              />
+              <q-route-tab
+                to="/request"
+                style="font-family: 'Fredoka One', cursive"
+                name="tab2"
+                label="Request space"
+              />
+              <q-route-tab
+                to="/about"
+                style="font-family: 'Fredoka One', cursive"
+                name="tab3"
+                label="About"
+              />
+            </q-tabs>
+          </q-list>
+        </q-btn-dropdown>
         <q-select
-          style="font-family: 'Fredoka One', cursive; min-width: 100px"
+          style="font-family: 'Fredoka One', cursive; min-width: 50px"
           v-model="locale"
           :options="localeOptions"
           dense
@@ -54,14 +58,15 @@
       <q-toolbar class="bg-purple">
         <q-toolbar-title>
           {{ new Date().getFullYear() }} —
-          <strong>Philoxenia - by Tynr.io</strong></q-toolbar-title>
+          <strong>Philoxenia - by Tynr.io</strong></q-toolbar-title
+        >
       </q-toolbar>
     </q-footer>
   </q-layout>
 </template>
 
 <script lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export default {
@@ -74,9 +79,9 @@ export default {
 
       locale,
       localeOptions: [
-        { value: 'en-US', label: 'English 🇬🇧' },
-        { value: 'gr', label: 'Greek 🇬🇷' },
-        { value: 'ar', label: 'Arabic 🇸🇦' },
+        { value: 'en-US', label: 'English' },
+        { value: 'gr', label: 'Greek' },
+        { value: 'ar', label: 'Arabic' },
       ],
     };
   },
