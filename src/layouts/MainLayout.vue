@@ -14,7 +14,34 @@
         notice shrink property since we are placing it
         as child of QToolbar
       -->
-        <q-btn-dropdown style="font-family: 'Fredoka One', cursive;" stretch flat label="Menu">
+        <q-tabs style="margin-right:50px" v-if="$q.platform.is.desktop" v-model="tab" shrink>
+          <q-route-tab
+            to="/offer"
+            style="font-family: 'Fredoka One', cursive"
+            name="offer"
+            label="Offer space"
+          />
+          <q-route-tab
+            to="/request"
+            style="font-family: 'Fredoka One', cursive"
+            name="tab2"
+            label="Request space"
+          />
+          <q-route-tab
+            to="/about"
+            style="font-family: 'Fredoka One', cursive"
+            name="tab3"
+            label="About"
+          />
+        </q-tabs>
+        <q-btn-dropdown
+          v-if="$q.platform.is.mobile"
+          style="font-family: 'Fredoka One', cursive"
+          stretch
+          flat
+          borderless
+          label="Menu"
+        >
           <q-list>
             <q-tabs v-model="tab" shrink>
               <q-route-tab
