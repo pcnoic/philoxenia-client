@@ -117,7 +117,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
         <q-toggle v-model="accept" label="I accept the conditions." />
 
         <div>
-          <q-btn label="Submit" type="submit" color="purple" />
+          <q-btn label="Add" type="submit" color="purple" />
           <q-btn
             label="Reset"
             type="reset"
