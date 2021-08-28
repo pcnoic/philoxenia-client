@@ -25,10 +25,10 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           hint="Your age. Eg: 25"
           lazy-rules
           :rules="[
-            (val) => (val !== null && val !== '') || 'Please type your age',
+            (val) => (val !== null && val !== '') || 'Please type your age!',
             (val) =>
               (val > 18 && val < 100) ||
-              'You have to be an adult to submit your place',
+              'You have to be an adult to submit your place.',
           ]"
         />
 
@@ -44,26 +44,20 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
               'Please type your mobile number in international format.',
             (val) =>
               val.length != 12 ||
-              'Please type a number in international format',
+              'Please type a number in international format!',
           ]"
         />
 
         <q-input
           filled
           v-model="email"
-          hint="An email address to be contacted"
+          hint="An email address to be contacted."
           input-class="text-right"
           label-slot
           clearable
         >
           <template v-slot:label>
             <div class="row items-center all-pointer-events">
-              <q-icon
-                class="q-mr-xs"
-                color="deep-orange"
-                size="24px"
-                name="mail"
-              />
               Email
 
               <q-tooltip
@@ -82,7 +76,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           v-model="spacetype"
           :options="space_options"
           label="Space Type"
-          hint="The type of space you're offering"
+          hint="The type of space you're offering."
         />
 
         <q-select
@@ -90,7 +84,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           v-model="region"
           :options="region_options"
           label="Region"
-          hint="The region of the space"
+          hint="The region of the space."
         />
 
         <q-select
@@ -98,7 +92,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           v-model="pet"
           :options="pet_options"
           label="Pet Friendly"
-          hint="If you accept pets in your offered space"
+          hint="If you accept pets in your offered space."
         />
 
         <q-badge color="secondary"> Max visitors: {{ visitorscount }} </q-badge>
@@ -140,7 +134,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
 <script>
 import { useQuasar } from 'quasar';
 import { ref } from 'vue';
-import { api } from 'boot/axios'
+import { api } from 'boot/axios';
 
 export default {
   setup() {
@@ -154,14 +148,14 @@ export default {
     const spacetype = ref(null);
     const region = ref(null);
     const pet = ref(null);
-    const visitorscount = ref(null);
-    const timeperiod = ref(null);
+    const visitorscount = ref(1);
+    const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
 
     return {
       telephone,
       email,
-      visitorscount: ref(1),
-      spacetype: ref(null),
+      visitorscount,
+      spacetype,
       space_options: [
         'Flat',
         'Condo',
@@ -171,7 +165,7 @@ export default {
         'Tiny Home',
         'Shared Space',
       ],
-      region: ref(null),
+      region,
       region_options: [
         'Achaea',
         'Acarnania',
@@ -228,15 +222,14 @@ export default {
         'Xanthi',
         'Zakynthos',
       ],
-      timeperiod: ref({ from: '2020/07/08', to: '2020/07/17' }),
-      pet: ref(null),
+      timeperiod,
+      pet,
       pet_options: ['Yes', 'No', 'More information required'],
       name,
       age,
       accept,
 
       onSubmit() {
-
         if (accept.value !== true) {
           $q.notify({
             color: 'red-5',
@@ -251,13 +244,21 @@ export default {
           const spaceOffer = {
             owner: name.value,
             owner_age: age.value,
+            telephone: telephone.value,
+            email: email.value,
             type: spacetype.value,
             region: region.value,
-            availability_start: timeperiod.value,
-            availability_end: timeperiod.value,
+            availability_start: timeperiod.value["from"],
+            availability_end: timeperiod.value["to"],
             visitors_max: visitorscount.value,
             pet_friendly: pet.value
           }
+
+          api.post('/api/v1/space/add', spaceOffer).then(response => {
+            let result = response
+          })
+
+          console.log(result)
 
           $q.notify({
             color: 'green-4',

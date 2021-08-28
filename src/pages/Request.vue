@@ -71,6 +71,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
 <script>
 import { useQuasar } from 'quasar';
 import { ref } from 'vue';
+import { api } from 'boot/axios';
 
 export default {
   setup() {
@@ -79,16 +80,16 @@ export default {
     const spacetype = ref(null);
     const region = ref(null);
     const pet = ref(null);
-    const visitorscount = ref(null);
-    const timeperiod = ref(null);
+    const visitorscount = ref(1);
+    const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
     const accept = ref(false);
 
     return {
-      timeperiod: ref({ from: '2020/07/08', to: '2020/07/17' }),
-      pet: ref(null),
+      timeperiod,
+      pet,
       pet_options: ['Yes', 'No', 'More information required'],
-      visitorscount: ref(1),
-      region: ref(null),
+      visitorscount,
+      region,
       region_options: [
         'Achaea',
         'Acarnania',
@@ -145,7 +146,7 @@ export default {
         'Xanthi',
         'Zakynthos',
       ],
-      spacetype: ref(null),
+      spacetype,
       space_options: [
         'Flat',
         'Condo',
@@ -166,6 +167,23 @@ export default {
             message: 'You need to accept the license and terms first',
           });
         } else {
+          // Make request to offer
+          /* eslint-disable */
+          const spaceRequest = {
+            type: spacetype.value,
+            region: region.value,
+            availability_start: timeperiod.value['from'],
+            availability_end: timeperiod.value['to'],
+            visitors_max: visitorscount.value,
+            pet_friendly: pet.value,
+          };
+
+          api.post('/api/v1/space/request', spaceRequest).then((response) => {
+            let result = response;
+          });
+
+          console.log(result);
+
           $q.notify({
             color: 'green-4',
             textColor: 'white',
