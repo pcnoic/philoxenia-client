@@ -64,7 +64,6 @@ export default {
   mounted() {
     /* eslint-disable */
     api.get('/api/v1/space/latest').then(response => {
-            console.log(response);
             this.rows = response.data;
     })
   },

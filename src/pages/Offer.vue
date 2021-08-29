@@ -2,12 +2,30 @@
 eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
   <q-page class="column items-center justify-evenly">
-    <h2 class="text-center">
+    <h2 v-if="!this.successfullSubmit" class="text-center">
       If you are a space owner, fill the form. <br /><br />
       🏠
     </h2>
     <div class="q-pa-md" style="max-width: 400px">
-      <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+      <!-- 
+        Show on success
+      -->
+      <div style="text-align: center; font-size: 32px;" v-if="this.successfullSubmit">
+        <q-icon name="thumb_up_off_alt" />
+        <p style="font-family: 'Ubuntu', sans-serif">You have successfully added your space.</p>
+        <q-btn color="purple" label="Add Another Space" @click="this.successfullSubmit = false"/>
+      </div>
+
+      <!--
+        Show on failue
+      -->
+      <div style="text-align: center; font-size: 32px;" v-if="this.unsuccessfullSubmit">
+        <q-icon name="thumb_down_off_alt" />
+        <p style="font-family: 'Ubuntu', sans-serif">Something went wrong. Please try again</p>
+        <q-btn color="purple" label="Try again" @click="this.unsuccessfullSubmit = false"/>
+      </div>
+
+      <q-form v-if="!this.successfullSubmit" @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <q-input
           filled
           v-model="name"
@@ -137,9 +155,20 @@ import { ref } from 'vue';
 import { api } from 'boot/axios';
 
 export default {
+  data() {
+    return {
+      //successfullSubmit: false
+    }
+  },
+  methods () {
+    return {
+    }
+  },
   setup() {
     const $q = useQuasar();
 
+    const unsuccessfullSubmit = ref(false)
+    const successfullSubmit = ref(false)
     const name = ref(null);
     const age = ref(null);
     const accept = ref(false);
@@ -152,6 +181,8 @@ export default {
     const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
 
     return {
+      unsuccessfullSubmit,
+      successfullSubmit,
       telephone,
       email,
       visitorscount,
@@ -224,7 +255,7 @@ export default {
       ],
       timeperiod,
       pet,
-      pet_options: ['Yes', 'No', 'More information required'],
+      pet_options: ['Yes', 'No'],
       name,
       age,
       accept,
@@ -255,17 +286,12 @@ export default {
           }
 
           api.post('/api/v1/space/add', spaceOffer).then(response => {
-            let result = response
+            if (response.status == 200) {
+              successfullSubmit.value = true;
+            }else {
+              unsuccessfullSubmit.value = true;
+            }
           })
-
-          console.log(result)
-
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Your space has been added to Philoxenia!',
-          });
         }
       },
 
