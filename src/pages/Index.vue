@@ -22,9 +22,8 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
         title="Latest spaces added 🏠"
         :rows="rows"
         :columns="columns"
-        row-key="name"
+        row-key="type"
         :filter="filter"
-        hide-header
       >
         <template v-slot:top-right>
           <q-input
@@ -44,67 +43,30 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
   </q-page>
 </template>
 <script>
-import { ref } from 'vue';
-
-const columns = [
-  {
-    name: 'type',
-    required: true,
-    label: 'Type',
-    align: 'left',
-    field: 'type',
-    sortable: true,
-  },
-  {
-    name: 'location',
-    align: 'center',
-    label: 'Location',
-    field: 'location',
-    sortable: true,
-  },
-  { name: 'capacity', label: 'Capacity', field: 'capacity', sortable: true },
-  { name: 'pets', label: 'Pet Friendly', field: 'pets' },
-  { name: 'availability', label: 'Days Available', field: 'availability' }
-];
-
-const rows = [
-  {
-    type: 'Loft',
-    location: 'Earth',
-    capacity: 10,
-    pets: 'Yes',
-    availability: 10
-  },
-    {
-    type: 'Loft',
-    location: 'Earth',
-    capacity: 10,
-    pets: 'Yes',
-    availability: 10
-  },
-    {
-    type: 'Loft',
-    location: 'Earth',
-    capacity: 10,
-    pets: 'Yes',
-    availability: 10
-  },
-    {
-    type: 'Loft',
-    location: 'Earth',
-    capacity: 10,
-    pets: 'Yes',
-    availability: 10
-  }
-];
+import { api } from 'boot/axios';
 
 export default {
-  setup() {
-    return {
-      filter: ref(''),
-      columns,
-      rows,
-    };
+  data(){
+    return { 
+      filter: '',
+      rows: [],
+      columns: [
+            /* eslint-disable */
+            { name: 'type', label: 'Type', field: row => row.type},
+            { name: 'region', label: 'Region', field: 'region'},
+            { name: 'visitors_max', label: 'Max Visitors', field: 'visitors_max'},
+            { name: 'pet_friendly', label: 'Pet Friendly', field: 'pet_friendly' },
+            { name: 'availability_start', label: 'Available From', field: 'availability_start' },
+            { name: 'availability_end', label: 'Available To', field: 'availability_end' }
+      ]
+    }
+  },
+  mounted() {
+    /* eslint-disable */
+    api.get('/api/v1/space/latest').then(response => {
+            console.log(response);
+            this.rows = response.data;
+    })
   },
 };
 </script>
