@@ -85,7 +85,7 @@
       <q-toolbar class="bg-purple">
         <q-toolbar-title>
           {{ new Date().getFullYear() }} —
-          <strong>Philoxenia - by Tynr.io</strong></q-toolbar-title
+          <strong>Philoxenia</strong></q-toolbar-title
         >
       </q-toolbar>
     </q-footer>
