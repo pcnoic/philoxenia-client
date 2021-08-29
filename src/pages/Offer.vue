@@ -28,7 +28,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
             (val) => (val !== null && val !== '') || 'Please type your age!',
             (val) =>
               (val > 18 && val < 100) ||
-              'You have to be an adult to submit your place.',
+              'You have to provide a real age and you have to be an adult.',
           ]"
         />
 
