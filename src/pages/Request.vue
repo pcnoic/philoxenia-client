@@ -2,18 +2,85 @@
 eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
   <q-page class="column items-center justify-evenly">
-    <h2 class="text-center">
+    <!--
+      Show on failue
+    -->
+    <div
+      style="text-align: center; font-size: 32px"
+      v-if="this.unsuccessfullRequest"
+    >
+      <q-icon name="sentiment_dissatisfied" />
+      <p style="font-family: 'Ubuntu', sans-serif">
+        Something went wrong. Please try again.
+      </p>
+      <q-btn
+        color="purple"
+        label="Try again"
+        @click="this.unsuccessfullRequest = false"
+      />
+    </div>
+
+    <!--
+      Show on No results
+    -->
+    <div style="text-align: center; font-size: 32px" v-if="this.noResultsFound">
+      <q-icon name="sentiment_dissatisfied" />
+      <p style="font-family: 'Ubuntu', sans-serif">
+        No spaces found at this time. Try again later.
+      </p>
+    </div>
+
+    <!--
+      Show on fetched results
+    -->
+    <div v-if="this.resultsFound" class="q-pa-md">
+      <q-table
+        grid
+        card-class="bg-primary text-white"
+        title="🏠 Spaces Available"
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+        :filter="filter"
+        hide-header
+      >
+        <template v-slot:top-right>
+          <q-input
+            borderless
+            dense
+            debounce="300"
+            v-model="filter"
+            placeholder="Search"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      </q-table>
+    </div>
+
+    <!-- Main Page On Load -->
+
+    <h2
+      v-if="!this.unsuccessfullRequest && !this.resultsFound"
+      class="text-center"
+    >
       If you need a space, fill the form.<br /><br />
       💌
     </h2>
-    <div class="q-pa-md" style="max-width: 400px">
+    <div
+      v-if="!this.unsuccessfullRequest && !this.resultsFound"
+      class="q-pa-md"
+      style="max-width: 400px"
+    >
       <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
         <q-select
           standout
           v-model="spacetype"
           :options="space_options"
           label="Space Type"
-          hint="The type of space you're offering"
+          hint="The type of space you're requesting."
         />
 
         <q-select
@@ -21,7 +88,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           v-model="region"
           :options="region_options"
           label="Region"
-          hint="The region of the space"
+          hint="The region you're looking for a space."
         />
 
         <q-select
@@ -29,10 +96,12 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           v-model="pet"
           :options="pet_options"
           label="Pet Friendly"
-          hint="If you accept pets in your offered space"
+          hint="If you require the space to be pet friendly."
         />
 
-        <q-badge color="secondary"> Max visitors: {{ visitorscount }} </q-badge>
+        <q-badge color="secondary">
+          Sleeps (visitors): {{ visitorscount }}
+        </q-badge>
         <q-slider
           v-model="visitorscount"
           color="purple"
@@ -73,10 +142,14 @@ import { useQuasar } from 'quasar';
 import { ref } from 'vue';
 import { api } from 'boot/axios';
 
+
 export default {
   setup() {
     const $q = useQuasar();
 
+    const resultsFound = ref(true);
+    const noResultsFound = ref(false);
+    const unsuccessfullRequest = ref(false);
     const spacetype = ref(null);
     const region = ref(null);
     const pet = ref(null);
@@ -85,9 +158,25 @@ export default {
     const accept = ref(false);
 
     return {
+      filter: ref(''),
+      /* eslint-disable */
+      columns: [
+        { name: 'owner', label: 'Owner\'s Name', field: row => row.owner },
+        { name: 'owner_age', label: 'Owner\'s Age', field: 'owner_age' },
+        { name: 'type', label: 'Type of Place', field: 'type'},
+        { name: 'region', label: 'Region', field: 'region' },
+        { name: 'availability_start', label: 'Available From', field: 'availability_start' },
+        { name: 'availability_end', label: 'Available To', field: 'availability_end' },
+        { name: 'visitors_max', label: 'Maximum Number of Visitors', field: 'visitors_max' },
+        { name: 'pet_friendly', label: 'Pets Allowed', field: 'pet_friendly' }
+      ],
+      rows: [], // for results
+      resultsFound,
+      noResultsFound,
+      unsuccessfullRequest,
       timeperiod,
       pet,
-      pet_options: ['Yes', 'No', 'More information required'],
+      pet_options: ['Yes', 'No'],
       visitorscount,
       region,
       region_options: [
@@ -179,16 +268,16 @@ export default {
           };
 
           api.post('/api/v1/space/request', spaceRequest).then((response) => {
-            let result = response;
-          });
-
-          console.log(result);
-
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Submitted',
+            if (response.status == 200) {
+              if (response.data['status'] == 'no_results') {
+                noResultsFound.value = true;
+              } else {
+                resultsFound.value = true;
+                this.rows = response.data;
+              }
+            } else {
+              unsuccessfullRequest.value = true;
+            }
           });
         }
       },

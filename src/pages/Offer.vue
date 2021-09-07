@@ -21,7 +21,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
       -->
       <div style="text-align: center; font-size: 32px;" v-if="this.unsuccessfullSubmit">
         <q-icon name="thumb_down_off_alt" />
-        <p style="font-family: 'Ubuntu', sans-serif">Something went wrong. Please try again</p>
+        <p style="font-family: 'Ubuntu', sans-serif">Something went wrong. Please try again.</p>
         <q-btn color="purple" label="Try again" @click="this.unsuccessfullSubmit = false"/>
       </div>
 
@@ -157,7 +157,6 @@ import { api } from 'boot/axios';
 export default {
   data() {
     return {
-      //successfullSubmit: false
     }
   },
   methods () {
