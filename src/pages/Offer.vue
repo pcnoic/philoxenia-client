@@ -164,6 +164,12 @@ export default {
     }
   },
   setup() {
+
+    var today = new Date();
+    /* eslint-disable */ 
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
+
     const $q = useQuasar();
 
     const unsuccessfullSubmit = ref(false)
@@ -177,7 +183,7 @@ export default {
     const region = ref(null);
     const pet = ref(null);
     const visitorscount = ref(1);
-    const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
+    const timeperiod = ref({ from: date.replace(/\//g, '-'), to: date.replace(/\//g, '-') });
 
     return {
       unsuccessfullSubmit,

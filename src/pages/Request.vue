@@ -200,6 +200,10 @@ export default {
   setup() {
     const $q = useQuasar();
 
+    var today = new Date();
+    /* eslint-disable */ 
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+
     let searchDone = ref(false);
     const resultsFound = ref(false);
     const noResultsFound = ref(false);
@@ -208,7 +212,7 @@ export default {
     const region = ref(null);
     const pet = ref(null);
     const visitorscount = ref(1);
-    const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
+    const timeperiod = ref({ from: date.replace(/\//g, '-'), to: date.replace(/\//g, '-') });
     const accept = ref(false);
     const results = ref([]);
     const contactInfoVisible = ref(false);
