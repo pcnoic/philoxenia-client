@@ -97,13 +97,13 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           <div>
             <span>Email</span>:
             <span class="text-bold">
-              {{ selectedResult.email }}
+              <a href="mailto:{{ selectedResult.email }}">{{ selectedResult.email }}</a>
             </span>
           </div>
           <div>
             <span>Phone Number</span>:
             <span class="text-bold">
-              {{ selectedResult.telephone }}
+              <a href="tel:{{ selectedResult.telephone }}">{{ selectedResult.telephone }}</a>
             </span>
           </div>
         </q-card-section>
