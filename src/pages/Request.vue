@@ -33,32 +33,85 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     <!--
       Show on fetched results
     -->
-    <div v-if="this.resultsFound" class="q-pa-md">
-      <q-table
-        grid
-        card-class="bg-primary text-white"
-        title="🏠 Spaces Available"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        :filter="filter"
-        hide-header
+    <div v-if="resultsFound" class="q-pa-md results-wrapper">
+      <q-card
+        v-for="(result, index) in results"
+        :key="index"
+        class="results-card"
       >
-        <template v-slot:top-right>
-          <q-input
-            borderless
-            dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Search"
-          >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template>
-      </q-table>
+        <q-card-section class="column results-card--info">
+          <div class="column results-header">
+            <div class="text-h6 results-title">
+              {{ result.region }} -- {{ result.type }}
+            </div>
+            <div class="text-subtitle2 results-subtitle">
+              Available from
+              <span class="accent">{{ result.availability_start }}</span> to
+              <span class="accent">{{ result.availability_end }}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="results-info">
+                <span class="results-info--key">Pets Allowed</span>:
+                <span class="results-info--value">
+                  {{ result.pet_friendly ? 'Yes' : 'No' }}
+                </span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="results-info">
+                <span class="results-info--key">Maximum Guests</span>:
+                <span class="results-info--value">
+                  {{ result.visitors_max }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-separator />
+
+        <q-card-actions align="right" class="results-card--actions">
+          <q-btn flat color="primary" @click="onShowContactDetails(result)">
+            Contact
+          </q-btn>
+        </q-card-actions>
+      </q-card>
     </div>
+
+    <q-dialog v-model="contactInfoVisible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Property Contact Details</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none column">
+          <div>
+            <span>Owner</span>:
+            <span class="text-bold">
+              {{ selectedResult.owner }}
+            </span>
+          </div>
+          <div>
+            <span>Email</span>:
+            <span class="text-bold">
+              {{ selectedResult.email }}
+            </span>
+          </div>
+          <div>
+            <span>Phone Number</span>:
+            <span class="text-bold">
+              {{ selectedResult.telephone }}
+            </span>
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
     <!-- Main Page On Load -->
 
@@ -142,12 +195,11 @@ import { useQuasar } from 'quasar';
 import { ref } from 'vue';
 import { api } from 'boot/axios';
 
-
 export default {
   setup() {
     const $q = useQuasar();
 
-    const resultsFound = ref(true);
+    const resultsFound = ref(false);
     const noResultsFound = ref(false);
     const unsuccessfullRequest = ref(false);
     const spacetype = ref(null);
@@ -156,21 +208,14 @@ export default {
     const visitorscount = ref(1);
     const timeperiod = ref({ from: '2020/07/08', to: '2020/07/17' });
     const accept = ref(false);
+    const results = ref([]);
+    const contactInfoVisible = ref(false);
+    const selectedResult = ref({});
 
     return {
-      filter: ref(''),
-      /* eslint-disable */
-      columns: [
-        { name: 'owner', label: 'Owner\'s Name', field: row => row.owner },
-        { name: 'owner_age', label: 'Owner\'s Age', field: 'owner_age' },
-        { name: 'type', label: 'Type of Place', field: 'type'},
-        { name: 'region', label: 'Region', field: 'region' },
-        { name: 'availability_start', label: 'Available From', field: 'availability_start' },
-        { name: 'availability_end', label: 'Available To', field: 'availability_end' },
-        { name: 'visitors_max', label: 'Maximum Number of Visitors', field: 'visitors_max' },
-        { name: 'pet_friendly', label: 'Pets Allowed', field: 'pet_friendly' }
-      ],
-      rows: [], // for results
+      results, // for results
+      contactInfoVisible,
+      selectedResult,
       resultsFound,
       noResultsFound,
       unsuccessfullRequest,
@@ -273,7 +318,7 @@ export default {
                 noResultsFound.value = true;
               } else {
                 resultsFound.value = true;
-                this.rows = response.data;
+                results.value = response.data;
               }
             } else {
               unsuccessfullRequest.value = true;
@@ -291,7 +336,57 @@ export default {
 
         accept.value = false;
       },
+
+      onShowContactDetails(propertyAttributes) {
+        contactInfoVisible.value = true;
+        selectedResult.value = propertyAttributes;
+      },
     };
   },
 };
 </script>
+
+<style scoped lang="scss">
+.accent {
+  font-style: italic;
+  font-weight: bold;
+  padding: 0 3px;
+}
+
+.results-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 60px;
+
+  .results-card {
+    width: 400px;
+
+    .results-card--info {
+      background: #fdeafa;
+
+      .results-header {
+        .results-title {
+          font-style: italic;
+        }
+        .results-subtitle {
+        }
+      }
+      .results-info {
+        padding-top: 15px;
+
+        .results-info--key {
+          text-decoration: underline;
+        }
+        .results-info--value {
+          font-weight: bold;
+          padding-left: 5px;
+        }
+      }
+    }
+
+    .results-card--actions {
+    }
+  }
+}
+</style>
