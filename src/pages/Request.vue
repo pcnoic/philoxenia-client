@@ -7,7 +7,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     -->
     <div
       style="text-align: center; font-size: 32px"
-      v-if="this.unsuccessfullRequest"
+      v-if="unsuccessfullRequest && searchDone"
     >
       <q-icon name="sentiment_dissatisfied" />
       <p style="font-family: 'Ubuntu', sans-serif">
@@ -16,24 +16,25 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
       <q-btn
         color="purple"
         label="Try again"
-        @click="this.unsuccessfullRequest = false"
+        @click="unsuccessfullRequest = false"
       />
     </div>
 
     <!--
       Show on No results
     -->
-    <div style="text-align: center; font-size: 32px" v-if="this.noResultsFound">
+    <div style="text-align: center; font-size: 32px" v-if="noResultsFound && searchDone">
       <q-icon name="sentiment_dissatisfied" />
       <p style="font-family: 'Ubuntu', sans-serif">
         No spaces found at this time. Try again later.
       </p>
+      <q-btn color="purple" label="Try Again" @click="searchDone = false"/>
     </div>
 
     <!--
       Show on fetched results
     -->
-    <div v-if="resultsFound" class="q-pa-md results-wrapper">
+    <div v-if="resultsFound && searchDone" class="q-pa-md results-wrapper">
       <q-card
         v-for="(result, index) in results"
         :key="index"
@@ -116,14 +117,14 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     <!-- Main Page On Load -->
 
     <h2
-      v-if="!this.unsuccessfullRequest && !this.resultsFound"
+      v-if="!searchDone"
       class="text-center"
     >
       If you need a space, fill the form.<br /><br />
       💌
     </h2>
     <div
-      v-if="!this.unsuccessfullRequest && !this.resultsFound"
+      v-if="!searchDone"
       class="q-pa-md"
       style="max-width: 400px"
     >
@@ -199,6 +200,7 @@ export default {
   setup() {
     const $q = useQuasar();
 
+    let searchDone = ref(false);
     const resultsFound = ref(false);
     const noResultsFound = ref(false);
     const unsuccessfullRequest = ref(false);
@@ -216,6 +218,7 @@ export default {
       results, // for results
       contactInfoVisible,
       selectedResult,
+      searchDone,
       resultsFound,
       noResultsFound,
       unsuccessfullRequest,
@@ -315,6 +318,7 @@ export default {
           api.post('/api/v1/space/request', spaceRequest).then((response) => {
             if (response.status == 200) {
               if (response.data['status'] == 'no_results') {
+                console.log("No results found!")
                 noResultsFound.value = true;
               } else {
                 resultsFound.value = true;
@@ -323,6 +327,7 @@ export default {
             } else {
               unsuccessfullRequest.value = true;
             }
+            searchDone.value = true;
           });
         }
       },
