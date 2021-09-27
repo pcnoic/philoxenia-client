@@ -2,7 +2,7 @@
 eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
   <q-page class="column items-center justify-evenly">
-    <h2 class="text-center" style="font-family: 'Megrim', cursive">
+    <h2 class="text-center" style="font-family: 'Inter', sans-serif;">
       🫂
       <br /><br />
       Welcome to Philoxenia, the P2P Space Exchange
@@ -71,5 +71,5 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Megrim&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500&display=swap');
 </style>
