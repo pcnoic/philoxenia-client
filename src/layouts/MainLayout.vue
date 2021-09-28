@@ -19,19 +19,19 @@
             to="/offer"
             style="font-family: 'Ubuntu', sans-serif"
             name="offer"
-            label="Offer space"
+            :label="$t('offerSpace')"
           />
           <q-route-tab
             to="/request"
             style="font-family: 'Ubuntu', sans-serif"
             name="tab2"
-            label="Request space"
+            :label="$t('requestSpace')"
           />
           <q-route-tab
             to="/about"
             style="font-family: 'Ubuntu', sans-serif"
             name="tab3"
-            label="About"
+            :label="$t('about')"
           />
         </q-tabs>
         <q-btn-dropdown
@@ -40,7 +40,7 @@
           stretch
           flat
           borderless
-          label="Menu"
+          :label="$t('menu')"
         >
           <q-list>
             <q-tabs v-model="tab" shrink>
@@ -48,19 +48,19 @@
                 to="/offer"
                 style="font-family: 'Ubuntu', sans-serif"
                 name="offer"
-                label="Offer space"
+                :label="$t('offerSpace')"
               />
               <q-route-tab
                 to="/request"
                 style="font-family: 'Ubuntu', sans-serif"
                 name="tab2"
-                label="Request space"
+                :label="$t('requestSpace')"
               />
               <q-route-tab
                 to="/about"
                 style="font-family: 'Ubuntu', sans-serif"
                 name="tab3"
-                label="About"
+                :label="$t('about')"
               />
             </q-tabs>
           </q-list>
@@ -107,7 +107,7 @@ export default {
       locale,
       localeOptions: [
         { value: 'en-US', label: 'English' },
-        { value: 'gr', label: 'Greek' },
+        { value: 'el', label: 'Greek' },
         { value: 'ar', label: 'Arabic' },
       ],
     };

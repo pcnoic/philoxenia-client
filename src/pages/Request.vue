@@ -11,11 +11,11 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     >
       <q-icon name="sentiment_dissatisfied" />
       <p style="font-family: 'Ubuntu', sans-serif">
-        Something went wrong. Please try again.
+        {{ $t('somethingWentWrong') }}
       </p>
       <q-btn
         color="purple"
-        label="Try again"
+        :label="$t('tryAgain')"
         @click="unsuccessfullRequest = false"
       />
     </div>
@@ -26,9 +26,9 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     <div style="text-align: center; font-size: 32px" v-if="noResultsFound && searchDone">
       <q-icon name="sentiment_dissatisfied" />
       <p style="font-family: 'Ubuntu', sans-serif">
-        No spaces found at this time. Try again later.
+       {{ $t('noSpacesFound') }}
       </p>
-      <q-btn color="purple" label="Try Again" @click="searchDone = false"/>
+      <q-btn color="purple" :label="$t('tryAgain')" @click="searchDone = false"/>
     </div>
 
     <!--
@@ -46,7 +46,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
               {{ result.region }} -- {{ result.type }}
             </div>
             <div class="text-subtitle2 results-subtitle">
-              Available from
+              {{ $t('availableFrom') }}
               <span class="accent">{{ result.availability_start }}</span> to
               <span class="accent">{{ result.availability_end }}</span>
             </div>
@@ -54,7 +54,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           <div class="row">
             <div class="col-6">
               <div class="results-info">
-                <span class="results-info--key">Pets Allowed</span>:
+                <span class="results-info--key">{{ $t('petFriendly') }}</span>:
                 <span class="results-info--value">
                   {{ result.pet_friendly ? 'Yes' : 'No' }}
                 </span>
@@ -62,7 +62,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
             </div>
             <div class="col-6">
               <div class="results-info">
-                <span class="results-info--key">Maximum Guests</span>:
+                <span class="results-info--key">{{ $t('maximumGuests') }}</span>:
                 <span class="results-info--value">
                   {{ result.visitors_max }}
                 </span>
@@ -75,7 +75,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
 
         <q-card-actions align="right" class="results-card--actions">
           <q-btn flat color="primary" @click="onShowContactDetails(result)">
-            Contact
+            {{ $t('contact') }}
           </q-btn>
         </q-card-actions>
       </q-card>
@@ -84,24 +84,24 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     <q-dialog v-model="contactInfoVisible">
       <q-card>
         <q-card-section>
-          <div class="text-h6">Property Contact Details</div>
+          <div class="text-h6">{{ $t('propertyContactDetails') }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none column">
           <div>
-            <span>Owner</span>:
+            <span>{{ $t('owner') }}</span>:
             <span class="text-bold">
               {{ selectedResult.owner }}
             </span>
           </div>
           <div>
-            <span>Email</span>:
+            <span>{{ $t('email') }}</span>:
             <span class="text-bold">
               <a href="mailto:{{ selectedResult.email }}">{{ selectedResult.email }}</a>
             </span>
           </div>
           <div>
-            <span>Phone Number</span>:
+            <span>{{ $t('phoneNumber') }}r</span>:
             <span class="text-bold">
               <a href="tel:{{ selectedResult.telephone }}">{{ selectedResult.telephone }}</a>
             </span>
@@ -120,7 +120,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
       v-if="!searchDone"
       class="text-center"
     >
-      If you need a space, fill the form.<br /><br />
+      {{ $t('needSpace') }}<br /><br />
       💌
     </h2>
     <div
@@ -133,28 +133,28 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
           standout
           v-model="spacetype"
           :options="space_options"
-          label="Space Type"
-          hint="The type of space you're requesting."
+          :label="$t('spaceType')"
+          :hint="$t('spaceTypeHint')"
         />
 
         <q-select
           standout
           v-model="region"
           :options="region_options"
-          label="Region"
-          hint="The region you're looking for a space."
+          :label="$t('region')"
+          :hint="$t('regionHint')"
         />
 
         <q-select
           standout
           v-model="pet"
           :options="pet_options"
-          label="Pet Friendly"
-          hint="If you require the space to be pet friendly."
+          :label="$t('petFriendly')"
+          :hint="$t('petFriendlyHint')"
         />
 
         <q-badge color="secondary">
-          Sleeps (visitors): {{ visitorscount }}
+         {{ $t('sleeps') }} {{ visitorscount }}
         </q-badge>
         <q-slider
           v-model="visitorscount"
@@ -167,19 +167,19 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
 
         <div class="q-pa-md">
           <q-date
-            subtitle="Availability"
+            :subtitle="$t('availability')"
             v-model="timeperiod"
             range
             color="purple"
           />
         </div>
 
-        <q-toggle v-model="accept" label="I accept the conditions" />
+        <q-toggle v-model="accept" :label="$t('acceptConditions')" />
 
         <div>
-          <q-btn label="Find" type="submit" color="purple" />
+          <q-btn :label="$t('find')" type="submit" color="purple" />
           <q-btn
-            label="Reset"
+            :label="$t('reset')"
             type="reset"
             color="purple"
             flat

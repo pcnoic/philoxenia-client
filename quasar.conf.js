@@ -11,6 +11,9 @@
 const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
+
+  const path = require('path');
+
   return {
     // https://v2.quasar.dev/quasar-cli/supporting-ts
     supportTS: {
@@ -74,9 +77,25 @@ module.exports = configure(function (ctx) {
 
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack (/* chain */) {
-        //
-      },
+      extendWebpack (cfg) {
+        // for i18n resources (json/json5/yaml)
+        cfg.module.rules.push({
+          test: /\.(json5?|ya?ml)$/, // target json, json5, yaml and yml files
+          type: 'javascript/auto',
+          // Use `Rule.include` to specify the files of locale messages to be pre-compiled
+          include: [
+            path.resolve(__dirname, './src/i18n'),
+          ],
+          loader: '@intlify/vue-i18n-loader'
+        })
+    
+        // for i18n custom block
+        cfg.module.rules.push({
+          resourceQuery: /blockType=i18n/,
+          type: 'javascript/auto',
+          loader: '@intlify/vue-i18n-loader'
+        })
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer

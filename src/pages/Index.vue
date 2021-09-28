@@ -5,13 +5,13 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
     <h2 class="text-center" style="font-family: 'Inter', sans-serif;">
       🫂
       <br /><br />
-      Welcome to Philoxenia, the P2P Space Exchange
+      {{ $t('welcomeMessage') }}
     </h2>
     <q-btn
       align="around"
       class="btn-fixed-width"
       color="purple-5"
-      label="Learn more"
+      :label="$t('learnMore')"
       icon="lightbulb_outline"
       to="/about"
     />
@@ -19,7 +19,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
       <q-table
         grid
         card-class="text-black"
-        title="Latest spaces added 🏠"
+        :title="$t('latestSpacesAdded')"
         :rows="rows"
         :columns="columns"
         row-key="type"
@@ -31,7 +31,7 @@ eslint-disable @typescript-eslint/no-unsafe-member-access */
             dense
             debounce="300"
             v-model="filter"
-            placeholder="Search"
+            :placeholder="$t('search')"
           >
             <template v-slot:append>
               <q-icon name="search" />
