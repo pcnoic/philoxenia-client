@@ -108,7 +108,6 @@ export default {
       localeOptions: [
         { value: 'en-US', label: 'English' },
         { value: 'el', label: 'Greek' },
-        { value: 'ar', label: 'Arabic' },
       ],
     };
   },
