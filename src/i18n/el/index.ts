@@ -103,6 +103,7 @@ export default {
   ],
   addMore: 'Προσθήκη και άλλου χώρου',
   availableFrom: 'Διαθέσιμο από',
+  availableTo: 'Διαθέσιμο μέχρι',
   noSpacesFound: 'Δεν βρέθηκαν διαθέσιμοι χώροι.',
   maximumGuests: 'Μέγιστοι επισκέπτες',
   contact: 'Επικοινωνια',

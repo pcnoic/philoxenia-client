@@ -52,12 +52,12 @@ export default {
       rows: [],
       columns: [
             /* eslint-disable */
-            { name: 'type', label: 'Type', field: row => row.type},
-            { name: 'region', label: 'Region', field: 'region'},
-            { name: 'visitors_max', label: 'Max Visitors', field: 'visitors_max'},
-            { name: 'pet_friendly', label: 'Pet Friendly', field: 'pet_friendly' },
-            { name: 'availability_start', label: 'Available From', field: 'availability_start' },
-            { name: 'availability_end', label: 'Available To', field: 'availability_end' }
+            { name: 'type', label: this.$t('spaceType'), field: row => row.type},
+            { name: 'region', label: this.$t('region'), field: 'region'},
+            { name: 'visitors_max', label: this.$t('maxVisitors'), field: 'visitors_max'},
+            { name: 'pet_friendly', label: this.$t('petFriendly'), field: 'pet_friendly' },
+            { name: 'availability_start', label: this.$t('availableFrom'), field: 'availability_start' },
+            { name: 'availability_end', label: this.$t('availableTo'), field: 'availability_end' }
       ]
     }
   },
